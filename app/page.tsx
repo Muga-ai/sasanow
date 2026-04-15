@@ -409,7 +409,7 @@ export default function Home() {
 
       {/* NAV */}
       <nav style={{ background: scrolled ? "rgba(248,246,241,0.95)" : "transparent", borderBottom: scrolled ? "1px solid rgba(0,0,0,0.08)" : "1px solid transparent" }}>
-        <a href="#" className="nav-logo">
+        <a href="/login" className="nav-logo">
           <div className="nav-logo-mark">
             <svg viewBox="0 0 18 18" fill="none">
               <path d="M3 13L7 7L11 11L11 7.5L16 13" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
@@ -423,8 +423,8 @@ export default function Home() {
           <li><a href="#about">About</a></li>
         </ul>
         <div style={{ display: "flex", gap: "10px" }}>
-          <a href="#" className="btn-ghost">Sign in</a>
-          <a href="#" className="btn-primary">Order sasa →</a>
+          <a href="/login" className="btn-ghost">Sign in</a>
+          <a href="/login" className="btn-primary">Order sasa →</a>
         </div>
       </nav>
 
@@ -445,7 +445,7 @@ export default function Home() {
           Groceries, errands, pharmacy, home services — anything you need across the city, in under 45 minutes.
         </p>
         <div className="hero-cta">
-          <a href="#" className="btn-primary">Start your order →</a>
+          <a href="/login" className="btn-primary">Start your order →</a>
           <a href="#services" className="btn-ghost">Browse services</a>
         </div>
         <div className="hero-social-proof">
@@ -539,8 +539,8 @@ export default function Home() {
         <h2 className="section-title">Ready? Order sasa.</h2>
         <p className="cta-sub">Everything Nairobi needs, right now. Pay via M-Pesa.</p>
         <div className="cta-actions">
-          <a href="#" className="btn-dark">Order now</a>
-          <a href="#" className="btn-ghost" style={{ background: "rgba(255,255,255,0.3)", borderColor: "rgba(0,0,0,0.15)" }}>
+          <a href="/login" className="btn-dark">Order now</a>
+          <a href="/login" className="btn-ghost" style={{ background: "rgba(255,255,255,0.3)", borderColor: "rgba(0,0,0,0.15)" }}>
             Become a rider
           </a>
         </div>
