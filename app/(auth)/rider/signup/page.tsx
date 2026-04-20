@@ -9,6 +9,7 @@ import { setDoc, doc } from "firebase/firestore";
 import { db } from "@/lib/firebase";
 import type { Rider } from "@/types";
 import toast from "react-hot-toast";
+import { useAuth } from "@/components/AuthProvider";
 
 const nairobiAreas = [
   "Buruburu", "Dagoretti", "Donholm", "Eastleigh", "Embakasi",
@@ -32,6 +33,7 @@ export default function RiderSignupPage() {
   const [vehicleType, setVehicleType] = useState<"bicycle" | "motorbike" | "car" | "">("");
   const [loading, setLoading] = useState(false);
   const [uid, setUid] = useState("");
+  const { refreshUser } = useAuth();
 
   async function handleCreateAccount() {
     if (!email.trim()) return toast.error("Enter your email");
@@ -90,8 +92,10 @@ export default function RiderSignupPage() {
         email: email.trim(),
       });
 
-      toast.success("Rider account created! Welcome to Sasa Now.");
-      router.replace("/rider");
+await refreshUser();
+
+toast.success("Rider account created! Welcome to Sasa Now.");
+router.replace("/rider");
     } catch (err: any) {
       console.error(err);
       toast.error("Failed to save profile. Please try again.");

@@ -22,35 +22,60 @@ const AuthContext = createContext<AuthContextType>({
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [firebaseUser, setFirebaseUser] = useState<User | null>(null);
-  const [sasaUser, setSasaUser] = useState<SasaUser | null>(null);
+
+  // 🔥 KEY CHANGE: undefined = loading, null = no profile
+  const [sasaUser, setSasaUser] = useState<SasaUser | null | undefined>(undefined);
+
   const [loading, setLoading] = useState(true);
 
   async function loadSasaUser(uid: string) {
-    const profile = await getUser(uid);
-    setSasaUser(profile);
+    try {
+      const profile = await getUser(uid);
+
+      if (profile) {
+        setSasaUser(profile); // ✅ user exists
+      } else {
+        setSasaUser(null); // ❌ no profile → onboarding
+      }
+    } catch (err) {
+      console.error("Error loading user:", err);
+      setSasaUser(null);
+    }
   }
 
   async function refreshUser() {
     if (firebaseUser) {
+      setSasaUser(undefined); // 🔄 force reload state
       await loadSasaUser(firebaseUser.uid);
     }
   }
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      setLoading(true);
       setFirebaseUser(user);
+
       if (user) {
         await loadSasaUser(user.uid);
       } else {
         setSasaUser(null);
       }
+
       setLoading(false);
     });
+
     return () => unsubscribe();
   }, []);
 
   return (
-    <AuthContext.Provider value={{ firebaseUser, sasaUser, loading, refreshUser }}>
+    <AuthContext.Provider
+      value={{
+        firebaseUser,
+        sasaUser: sasaUser ?? null, // keep external API clean
+        loading: loading || sasaUser === undefined, // 🔥 ensures proper wait
+        refreshUser,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );

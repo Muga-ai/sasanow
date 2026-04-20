@@ -17,30 +17,34 @@ export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
   useEffect(() => {
     if (loading) return;
 
-    // Not logged in → send to login
+    // ❌ Not logged in
     if (!firebaseUser) {
       router.replace("/login");
       return;
     }
 
-    // Logged in but no Firestore profile yet → send to onboarding
+    // ⏳ Wait for Firestore user to load
+    if (sasaUser === null) return;
+
+    // ❌ No profile → onboarding
     if (!sasaUser) {
       router.replace("/onboarding");
       return;
     }
 
-    // Wrong role → send to their correct dashboard
+    // ✅ Role-based protection
     if (requiredRole && sasaUser.role !== requiredRole) {
       if (sasaUser.role === "admin") router.replace("/admin");
       else if (sasaUser.role === "rider") router.replace("/rider");
       else router.replace("/dashboard");
+      return;
     }
   }, [loading, firebaseUser, sasaUser, requiredRole, router]);
 
-  // Loading spinner
-  if (loading) {
+  // ⏳ Show loader while auth or Firestore is resolving
+  if (loading || (firebaseUser && sasaUser === null)) {
     return (
-      <div className="min-h-screen flex items-center justify-content-center bg-[#F8F6F1]">
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F6F1]">
         <div className="flex flex-col items-center gap-4">
           <div
             style={{
@@ -78,10 +82,13 @@ export function AuthGuard({ children, requiredRole }: AuthGuardProps) {
     );
   }
 
-  // Not authed — render nothing (redirect is in progress)
-  if (!firebaseUser || !sasaUser) return null;
+  // ❌ Not logged in (redirect already triggered)
+  if (!firebaseUser) return null;
 
-  // Role mismatch — render nothing
+  // ❌ No profile (redirect already triggered)
+  if (!sasaUser) return null;
+
+  // ❌ Role mismatch (redirect already triggered)
   if (requiredRole && sasaUser.role !== requiredRole) return null;
 
   return <>{children}</>;
