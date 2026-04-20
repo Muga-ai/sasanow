@@ -11,9 +11,14 @@ export type OrderStatus =
 export interface SasaUser {
   uid: string;
   phone: string;
+  email?: string;           // added for email-signup users
   name: string;
   role: UserRole;
-  location?: { lat: number; lng: number };
+  location?: {
+    lat?: number;
+    lng?: number;
+    area?: string;          // Nairobi area e.g. "Westlands"
+  };
   createdAt: Date;
 }
 
@@ -32,6 +37,7 @@ export interface Order {
   riderName?: string;
   amountKes: number;
   mpesaRef?: string;
+  mpesaTransactionId?: string;
   paid: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -42,9 +48,13 @@ export interface Rider {
   uid: string;
   name: string;
   phone: string;
+  email?: string;
+  area?: string;
+  vehicleType?: "bicycle" | "motorbike" | "car";
   isOnline: boolean;
   isAvailable: boolean;
   currentLocation?: { lat: number; lng: number };
+  currentOrderId?: string | null;
   totalDeliveries: number;
   rating: number;
 }

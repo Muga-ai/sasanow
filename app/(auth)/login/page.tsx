@@ -462,7 +462,10 @@ export default function LoginPage() {
             By continuing you agree to our{" "}
             <a href="/terms">Terms</a> &amp; <a href="/privacy">Privacy Policy</a>
           </p>
-
+<p className="note" style={{ marginTop: 20 }}>
+  Want to deliver with Sasa Now?{" "}
+  <a href="/rider/signup">Apply as a rider</a>
+</p>
         </div>
       </div>
     </>
